@@ -141,9 +141,7 @@
             links.forEach(function (link) {
                 var id = link.getAttribute('data-target');
                 link.addEventListener('mouseenter', function () { show(id); });
-                link.addEventListener('mouseleave', function () { show(null); });
                 link.addEventListener('focus', function () { show(id); });
-                link.addEventListener('blur', function () { show(null); });
             });
         })();
     </script>
