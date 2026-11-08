@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,16 +9,21 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            gap: 40px;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
             background-color: #f4f4f9;
+            color: #222;
         }
         .button-container {
             display: flex;
             flex-direction: column;
             gap: 15px;
             width: 200px;
+            flex-shrink: 0;
         }
         .nav-link {
             display: block;
@@ -35,17 +39,114 @@
             transition: background-color 0.2s;
             box-sizing: border-box;
         }
-        .nav-link:hover {
+        .nav-link:hover,
+        .nav-link:focus-visible {
             background-color: #0056b3;
+        }
+
+        .details {
+            width: min(640px, 100%);
+            max-height: 85vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 32px 36px;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+        .details p { margin: 0 0 1em; }
+        .details h3 {
+            margin: 0 0 12px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #007bff;
+        }
+        .details h3:not(:first-child) { margin-top: 24px; }
+        .details .tldr {
+            background: #eaf2ff;
+            border-left: 4px solid #007bff;
+            padding: 12px 16px;
+            border-radius: 4px;
+        }
+        .detail { display: none; }
+        .detail.active { display: block; }
+        .placeholder {
+            color: #888;
+            font-style: italic;
+        }
+        .placeholder.hidden { display: none; }
+
+        @media (max-width: 760px) {
+            body {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 24px;
+                min-height: auto;
+            }
+            .button-container { width: 100%; max-width: 200px; margin: 0 auto; }
+            .details { width: 100%; max-height: none; padding: 24px; }
         }
     </style>
 </head>
 <body>
 
     <div class="button-container">
-        <a href="tsp-visualiser" class="nav-link">VTTSP</a>
-        <a href="ninaro" class="nav-link">Ninaro</a>
+        <a href="tsp-visualiser" class="nav-link" data-target="vttsp">VTTSP</a>
+        <a href="ninaro" class="nav-link" data-target="ninaro">Ninaro</a>
     </div>
+
+    <div class="details" id="details">
+        <p class="placeholder" id="placeholder">Hover over a project to learn more about it.</p>
+
+        <section class="detail" id="vttsp">
+            <h3>Summary</h3>
+            <p class="tldr"><strong>TL;DR:</strong> In 1997, for a university project, I wrote a program that shows a computer working out the shortest route around a set of cities. I recently used an AI, Claude Opus, to bring it back to life as a website that runs on any browser. You can try it with the VTTSP button.</p>
+
+            <h3>Details</h3>
+            <p>The travelling salesman problem is a famous puzzle that sounds simple. A salesperson has to visit a list of cities, each exactly once, and get back home by the shortest possible route. With a handful of cities you can just try every route, but the number of routes explodes as the list grows. With 50 cities there are more possible routes than there are atoms on Earth, so even the fastest computer can’t check them all. In 1997, for my university project, I wrote a program called VTTSP, the Visualisation Tool for the Travelling Salesman Problem. Instead of just printing an answer, it lets you watch different strategies build and improve a route on screen, one step at a time, so you can see how each one “thinks”.</p>
+
+            <p>The program shows three families of methods. Insertion methods start with a tiny loop of two cities and add the rest one by one, each in the spot that adds the least extra distance. Iteration methods take a finished route and keep making small fixes, like moving one city or untangling a crossed section, until no fix helps. My favourite is simulated annealing, which borrows an idea from metalworking. When a blacksmith heats metal and lets it cool slowly, the atoms have time to settle into a strong, orderly pattern. The program does the same with a route. While it’s “hot”, it makes lots of random changes and sometimes even accepts ones that make the route a bit worse. That sounds odd, but it stops the program getting stuck on a route that only looks good up close. As it slowly “cools”, it gets pickier and pickier, until it settles on a route it can no longer improve. My program runs two versions of this side by side, so you can watch them race on the same map.</p>
+
+            <p>The original program only ran on old DOS computers, so it had been sitting unused for nearly 30 years. Recently I worked with Claude Opus, an AI model, to turn it into a website anyone can use. Over about three hours, I directed it step by step. It read my 1997 code and project notes, rebuilt the program for the web, and kept the original look and controls. It checked its work against the results I recorded back in 1997, and all 150 of the results that should come out the same every time matched exactly. I reviewed each stage before it went live. Now it runs in any web browser, even on a phone, using the VTTSP button. Try picking a map, choosing Annealing, and pressing GO!</p>
+        </section>
+
+        <section class="detail" id="ninaro">
+            <h3>Summary</h3>
+            <p class="tldr"><strong>TL;DR:</strong> In 1998, as a university project, I wrote Ninaro, a Connect Four game that works on any size board, where you can play against a friend or against five computer players of increasing skill. I’ve used an AI, Claude Opus, to bring it back to life as a website that runs in any browser, even on a phone. You can play it with the Ninaro button.</p>
+
+            <h3>Details</h3>
+            <p>The game. Ninaro stands for “N-in-a-row”. It’s Connect Four, where two players take turns dropping counters into a grid and the first to line up four in a row wins, but stretched to any shape. You can play the classic 7-by-8 board with four in a row, a big 12-by-13 board where you need six, or set up your own board, anywhere from 3 to 50 columns and rows. You can play a friend on the same computer or take on the computer, change everyone’s colours, keep score over a match of “best of” games, and get a hint when you’re stuck. It opens with a title screen where the counters drop in one by one to spell out NINARO.</p>
+
+            <p>The computer players. There are five computer opponents, and each one is a little smarter than the last because it follows one more rule. AI Random just drops a counter anywhere. AI Novice takes a winning move if it sees one. AI Normal also blocks you when you’re about to win. AI Expert also avoids dropping a counter that would let you win by dropping yours on top of it. AI Genius also weighs up how much room each column leaves for it to build a line. None of them looks ahead more than a move, yet the rules add up: in a tournament of 2,500 games, Genius won 96% of its games and Random only 8%, with the others falling neatly in between.</p>
+
+            <p>Bringing it back. The game only ran on old DOS computers and had sat unused for almost 30 years. Over about two hours, I directed Claude Opus to rebuild it for the web, reusing the approach from bringing back my other 1998 program. To make sure it played exactly like the original, it ran the 1998 program inside the browser and compared the new screens against it pixel by pixel. It also had the original 1998 code play 1,600 games against itself and checked that the new version makes every single move the same way. Along the way it found a handful of bugs nobody spotted in 1998. You can play it with the Ninaro button by clicking or tapping a column, and there’s a page where you can watch the computer players fight it out.</p>
+        </section>
+    </div>
+
+    <script>
+        (function () {
+            var placeholder = document.getElementById('placeholder');
+            var sections = document.querySelectorAll('.detail');
+            var links = document.querySelectorAll('.nav-link[data-target]');
+
+            function show(id) {
+                sections.forEach(function (s) {
+                    s.classList.toggle('active', s.id === id);
+                });
+                placeholder.classList.toggle('hidden', !!id);
+            }
+
+            links.forEach(function (link) {
+                var id = link.getAttribute('data-target');
+                link.addEventListener('mouseenter', function () { show(id); });
+                link.addEventListener('mouseleave', function () { show(null); });
+                link.addEventListener('focus', function () { show(id); });
+                link.addEventListener('blur', function () { show(null); });
+            });
+        })();
+    </script>
 
 </body>
 </html>
