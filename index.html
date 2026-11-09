@@ -19,11 +19,42 @@
             color: #222;
         }
         .button-container {
+            position: relative;
             display: flex;
             flex-direction: column;
             gap: 15px;
             width: 200px;
             flex-shrink: 0;
+        }
+        .nav-row {
+            position: relative;
+        }
+        .info-button {
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-left: 4px;
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: 2px solid #007bff;
+            border-radius: 50%;
+            background: white;
+            color: #007bff;
+            font: bold 16px Georgia, serif;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .info-button:hover,
+        .info-button:focus-visible {
+            background-color: #007bff;
+            color: white;
+            outline: none;
         }
         .nav-link {
             display: block;
@@ -98,8 +129,14 @@
 <body>
 
     <div class="button-container">
-        <a href="tsp-visualiser" class="nav-link" data-target="vttsp">VTTSP</a>
-        <a href="ninaro" class="nav-link" data-target="ninaro">Ninaro</a>
+        <div class="nav-row">
+            <a href="tsp-visualiser" class="nav-link" data-target="vttsp">VTTSP</a>
+            <button type="button" class="info-button" data-info="vttsp" aria-label="Show VTTSP details" aria-controls="details">i</button>
+        </div>
+        <div class="nav-row">
+            <a href="ninaro" class="nav-link" data-target="ninaro">Ninaro</a>
+            <button type="button" class="info-button" data-info="ninaro" aria-label="Show Ninaro details" aria-controls="details">i</button>
+        </div>
     </div>
 
     <div class="details" id="details">
@@ -137,18 +174,35 @@
             var placeholder = document.getElementById('placeholder');
             var sections = document.querySelectorAll('.detail');
             var links = document.querySelectorAll('.nav-link[data-target]');
+            var infoButtons = document.querySelectorAll('.info-button[data-info]');
+            var details = document.getElementById('details');
+            var current = null;
 
             function show(id) {
+                current = id || null;
                 sections.forEach(function (s) {
-                    s.classList.toggle('active', s.id === id);
+                    s.classList.toggle('active', s.id === current);
                 });
-                placeholder.classList.toggle('hidden', !!id);
+                placeholder.classList.toggle('hidden', !!current);
             }
 
             links.forEach(function (link) {
                 var id = link.getAttribute('data-target');
                 link.addEventListener('mouseenter', function () { show(id); });
                 link.addEventListener('focus', function () { show(id); });
+            });
+
+            // Each info button: hover (mouse) or tap/click (touch) shows the
+            // same details as hovering its project.
+            infoButtons.forEach(function (button) {
+                var id = button.getAttribute('data-info');
+                button.addEventListener('mouseenter', function () { show(id); });
+                button.addEventListener('click', function () {
+                    show(id);
+                    if (window.matchMedia('(max-width: 760px)').matches) {
+                        details.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
             });
         })();
     </script>
